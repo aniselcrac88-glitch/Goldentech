@@ -1,0 +1,387 @@
+/* ---------- ESTILOS GENERALES ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #111;
+  color: #f5f5f5;
+}
+
+/* ---------- ENCABEZADO ---------- */
+header {
+  background-color: #000;
+  color: #d4af37;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #d4af37;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #f5f5f5;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #d4af37;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  background: linear-gradient(to right, #000, #222);
+  color: #d4af37;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 25px;
+  color: #f5f5f5;
+}
+
+.btn {
+  background-color: #d4af37;
+  color: #000;
+  padding: 10px 25px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background-color: #b68a1b;
+  color: #fff;
+}
+
+/* ---------- SECCIÓN SOBRE ---------- */
+.sobre {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #181818;
+}
+
+.sobre h2 {
+  color: #d4af37;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* ---------- PRODUCTOS ---------- */
+.productos {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.productos h2 {
+  font-size: 2em;
+  margin-bottom: 40px;
+  color: #d4af37;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.producto {
+  background: #000;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.producto:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+}
+
+.producto img {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+.producto h3 {
+  margin-bottom: 10px;
+  color: #d4af37;
+}
+
+.producto p {
+  font-size: 0.95em;
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+.precio {
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #d4af37;
+  margin-bottom: 10px;
+}
+
+/* ---------- DETALLE PRODUCTO ---------- */
+.detalle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.detalle img {
+  width: 350px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+}
+
+.detalle .info {
+  max-width: 500px;
+}
+
+.detalle h2 {
+  color: #d4af37;
+  margin-bottom: 15px;
+}
+
+.detalle p {
+  color: #ddd;
+  margin-bottom: 15px;
+}
+
+.volver {
+  background-color: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+}
+
+.volver:hover {
+  background-color: #d4af37;
+  color: #000;
+}
+
+/* ---------- PIE ---------- */
+footer {
+  background-color: #000;
+  color: #aaa;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  font-size: 0.9em;
+}
+/* ---------- FORMULARIOS DE LOGIN Y REGISTRO ---------- */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+  color: #d4af37;
+  text-align: center;
+  padding: 20px;
+}
+
+.formulario h2 {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #d4af37;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.formulario form {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #d4af37;
+  border-radius: 15px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.formulario input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 2px solid #d4af37;
+  background: #111;
+  color: #fff;
+  font-size: 1.1em;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.formulario input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+.formulario .btn {
+  width: 100%;
+  background-color: #d4af37;
+  color: #000;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.formulario .btn:hover {
+  background-color: #b68a1b;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.formulario p {
+  margin-top: 20px;
+  color: #ccc;
+}
+
+.formulario a {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.formulario a:hover {
+  text-decoration: underline;
+}
+/* ---------- PRODUCTO DETALLE ---------- */
+.producto-detalle {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #111;
+  color: #f5f5f5;
+  padding: 60px 20px;
+  gap: 50px;
+}
+
+.galeria {
+  position: relative;
+  max-width: 400px;
+}
+
+.galeria img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: transform 0.3s;
+}
+
+.galeria img:hover {
+  transform: scale(1.02);
+}
+
+.flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #d4af37;
+  font-size: 2em;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.flecha:hover {
+  background-color: #d4af37;
+  color: #000;
+}
+
+.flecha.izq {
+  left: -40px;
+}
+
+.flecha.der {
+  right: -40px;
+}
+
+.info-producto {
+  max-width: 400px;
+  text-align: center;
+}
+
+.info-producto h2 {
+  font-size: 2em;
+  color: #d4af37;
+  margin-bottom: 15px;
+}
+
+.info-producto p {
+  font-size: 1.1em;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.info-producto .precio {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #d4af37;
+  margin-bottom: 25px;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.comprar {
+  background-color: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+}
+
+.comprar:hover {
+  background-color: #d4af37;
+  color: #000;
+}

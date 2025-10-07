@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auriculares Bluetooth - GoldenTech</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="logo">GoldenTech</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="carrito.html">Carrito 🛒</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="producto-detalle">
+    <!-- Galería -->
+    <div class="galeria">
+      <button class="flecha izq" onclick="cambiarImagen(-1)">&#10094;</button>
+      <img id="imagenProducto" src="https://images.unsplash.com/photo-1518444026475-6d1c9c3f3c58?auto=format&fit=crop&w=800&q=80" alt="Auriculares Bluetooth">
+      <button class="flecha der" onclick="cambiarImagen(1)">&#10095;</button>
+    </div>
+
+    <!-- Información -->
+    <div class="info-producto">
+      <h2>Auriculares Bluetooth</h2>
+      <p>
+        Disfruta de una calidad de sonido envolvente con estos auriculares inalámbricos. 
+        Diseño ergonómico, cancelación de ruido y batería de larga duración.
+      </p>
+      <span class="precio">$49.99</span>
+      <div class="acciones">
+        <button class="btn" onclick="agregarAlCarrito('Auriculares Bluetooth', '$49.99')">Agregar al carrito</button>
+        <button class="btn comprar" onclick="comprarAhora('Auriculares Bluetooth', '$49.99')">Comprar ahora</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 GoldenTech. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
