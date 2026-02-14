@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amor ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .hearts-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .start-screen {
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(238, 90, 36, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .game-header {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .progress {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-area {
+            width: 100%;
+            max-width: 900px;
+            height: 70vh;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .instruction {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .hidden-heart {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .hidden-heart:hover {
+            transform: scale(1.4);
+            filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.8));
+        }
+
+        .hidden-heart.found {
+            animation: foundAnim 0.6s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes foundAnim {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(2) rotate(180deg); }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .message-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transform: scale(0.8);
+            animation: popIn 0.4s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        .message-card::before {
+            content: '❤️';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.1;
+        }
+
+        .message-number {
+            color: #ee5a24;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .message-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #2d3436;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+
+        .close-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .final-screen {
+            text-align: center;
+            color: white;
+        }
+
+        .final-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .final-message {
+            font-size: 1.3rem;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .love-meter {
+            margin: 30px 0;
+        }
+
+        .meter-fill {
+            width: 300px;
+            height: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px auto;
+            position: relative;
+        }
+
+        .meter-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            width: 0%;
+            border-radius: 15px;
+            transition: width 2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meter-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 600px) {
+            .title { font-size: 2.5rem; }
+            .game-area { height: 60vh; }
+            .message-card { padding: 25px; }
+            .message-text { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-bg" id="heartsBg"></div>
+    <canvas class="fireworks" id="fireworks"></canvas>
+
+    <div class="screen active start-screen" id="startScreen">
+        <h1 class="title">Para Mi Amor</h1>
+        <p class="subtitle">Un pequeño juego para recordarte lo especial que eres</p>
+        <button class="btn" onclick="startGame()">Comenzar Nuestra Aventura ❤️</button>
+    </div>
+
+    <div class="screen" id="gameScreen">
+        <div class="game-header">
+            <div class="progress">Corazones encontrados: <span id="foundCount">0</span>/200</div>
+            <div class="progress">San Valentín 2026</div>
+        </div>
+        <p class="instruction">Haz clic en los corazones escondidos para descubrir mis razones para amarte...</p>
+        <div class="game-area" id="gameArea"></div>
+    </div>
+
+    <div class="message-modal" id="messageModal">
+        <div class="message-card">
+            <div class="message-number">Razón #<span id="reasonNum"></span></div>
+            <div class="message-text" id="reasonText"></div>
+            <button class="close-btn" onclick="closeModal()">Continuar ❤️</button>
+        </div>
+    </div>
+
+    <div class="screen final-screen" id="finalScreen">
+        <h2 class="final-title">¡Feliz San Valentín!</h2>
+        <div class="final-message">
+            <p>Has encontrado todos mis corazones, pero eso es solo una pequeña muestra de todo lo que siento por ti.</p>
+            <p style="margin-top: 20px; font-family: 'Dancing Script', cursive; font-size: 1.8rem;">
+                Eres mi persona favorita, mi mejor amiga y el amor de mi vida. 
+                Gracias por cada sonrisa, cada momento y cada día a tu lado.
+            </p>
+        </div>
+        <div class="love-meter">
+            <p>Cuánto te amo:</p>
+            <div class="meter-fill">
+                <div class="meter-bar" id="meterBar"></div>
+            </div>
+            <p style="font-size: 2rem; margin-top: 10px;">∞ Infinito</p>
+        </div>
+        <button class="btn" onclick="location.reload()">Jugar de Nuevo 🔄</button>
+    </div>
+
+    <script>
+        const reasons = [
+            "Porque tu sonrisa ilumina incluso mis días más grises.",
+            "Porque me haces reír incluso cuando no quiero sonreír.",
+            "Porque eres la persona más hermosa que he conocido, por dentro y por fuera.",
+            "Porque contigo puedo ser yo mismo, sin máscaras ni pretensiones.",
+            "Porque cada momento a tu lado se convierte en un recuerdo inolvidable.",
+            "Porque me inspiras a ser mejor persona cada día.",
+            "Porque simplemente no puedo imaginar mi vida sin ti.",
+            "Porque tu forma de ver el mundo es única y especial.",
+            "Porque me haces sentir el hombre más afortunado del universo.",
+            "Porque tu amor me ha curado heridas que no sabía que tenía.",
+            "Porque eres mi refugio seguro en cualquier tormenta.",
+            "Porque tu voz es mi melodía favorita.",
+            "Porque tus abrazos son mi lugar favorito en el mundo.",
+            "Porque me entiendes sin necesidad de explicaciones.",
+            "Porque siempre sabes qué decir para animarme.",
+            "Porque eres paciente cuando yo soy difícil.",
+            "Porque me perdonas cuando me equivoco.",
+            "Porque celebras mis éxitos como si fueran tuyos.",
+            "Porque me apoyas incluso cuando mis ideas son locas.",
+            "Porque eres honesta, aunque la verdad duela.",
+            "Porque me respetas y valoras mis opiniones.",
+            "Porque confías en mí incluso cuando yo dudo de mí mismo.",
+            "Porque me das espacio cuando lo necesito sin sentirte rechazada.",
+            "Porque siempre estás ahí cuando te necesito.",
+            "Porque me haces sentir importante y valorado.",
+            "Porque te preocupas por los detalles que a mí me gustan.",
+            "Porque recuerdas fechas y momentos especiales para nosotros.",
+            "Porque me sorprendes con detalles inesperados.",
+            "Porque cocinas para mí con tanto amor.",
+            "Porque cuidas de mí cuando estoy enfermo.",
+            "Porque me escuchas hablar de mis cosas aburridas.",
+            "Porque me animas a perseguir mis sueños.",
+            "Porque crees en mí más de lo que yo creo en mí mismo.",
+            "Porque me haces sentir capaz de conquistar el mundo.",
+            "Porque tu fe en nosotros nunca se tambalea.",
+            "Porque eres leal hasta el final.",
+            "Porque defiendes nuestra relación contra todo.",
+            "Porque eliges amarme todos los días.",
+            "Porque haces que el amor se sienta fácil.",
+            "Porque eres mi mejor amiga y mi amante.",
+            "Porque puedo contarte cualquier cosa sin juzgarme.",
+            "Porque me aceptas con todos mis defectos y errores.",
+            "Porque me inspiras a ser más paciente.",
+            "Porque me enseñas a ver el lado positivo de las cosas.",
+            "Porque eres aventurera y te gusta probar cosas nuevas.",
+            "Porque viajar contigo es la mejor experiencia.",
+            "Porque haces que los días ordinarios sean especiales.",
+            "Porque encuentras belleza en las cosas simples.",
+            "Porque te emocionas con facilidad y eso me contagia.",
+            "Porque tu entusiasmo por la vida es inspirador.",
+            "Porque no te rindes ante los obstáculos.",
+            "Porque luchas por lo que amas.",
+            "Porque eres valiente aunque no lo parezca.",
+            "Porque enfrentas tus miedos con determinación.",
+            "Porque creces y evolucionas constantemente.",
+            "Porque admites cuando te equivocas.",
+            "Porque pides perdón de corazón.",
+            "Porque cambias lo que no funciona en ti.",
+            "Porque trabajas en ser mejor cada día.",
+            "Porque tus metas y sueños me inspiran.",
+            "Porque ambicionas cosas grandes para tu vida.",
+            "Porque incluyes nuestro futuro en tus planes.",
+            "Porque sueñas en grande y me llevas contigo.",
+            "Porque construimos un futuro juntos.",
+            "Porque hablamos de nuestra vida en años, no en días.",
+            "Porque planeamos cosas lejanas juntos.",
+            "Porque me ves en tu futuro y eso me da paz.",
+            "Porque queremos las mismas cosas fundamentales.",
+            "Porque nuestros valores se alinean perfectamente.",
+            "Porque compartimos principios importantes.",
+            "Porque queremos formar una familia juntos.",
+            "Porque hablamos de nuestros hijos futuros.",
+            "Porque planeamos envejecer juntos.",
+            "Porque queremos crecer juntos toda la vida.",
+            "Porque nuestra historia de amor apenas comienza.",
+            "Porque cada capítulo juntos es mejor que el anterior.",
+            "Porque tenemos recuerdos increíbles construidos.",
+            "Porque nuestra historia es única y especial.",
+            "Porque nadie más tiene lo que nosotros tenemos.",
+            "Porque nuestra conexión es irrompible.",
+            "Porque nos entendemos con solo mirarnos.",
+            "Porque terminamos las frases del otro.",
+            "Porque pensamos lo mismo al mismo tiempo.",
+            "Porque tenemos nuestra propia forma de comunicarnos.",
+            "Porque nuestras bromas internas nadie más entiende.",
+            "Porque nos reímos de cosas que solo nosotros entendemos.",
+            "Porque tenemos nuestras tradiciones secretas.",
+            "Porque nuestros rituales diarios me hacen feliz.",
+            "Porque desayunar juntos es sagrado.",
+            "Porque las noches de película son perfectas.",
+            "Porque los domingos perezosos son mis favoritos.",
+            "Porque las caminatas de la mano son terapéuticas.",
+            "Porque dormir abrazados es lo mejor del mundo.",
+            "Porque despertar a tu lado es un regalo diario.",
+            "Porque los mensajes de buenos días alegran mi mañana.",
+            "Porque las llamadas antes de dormir son mi ritual.",
+            "Porque los mensajes random durante el día me hacen sonreír.",
+            "Porque las fotos que me envías me hacen sentir cerca.",
+            "Porque los memes que compartimos nos unen.",
+            "Porque la música que compartimos tiene significado.",
+            "Porque nuestra playlist de pareja es especial.",
+            "Porque bailar contigo, aunque sea en casa, es mágico.",
+            "Porque cantar juntos en el coche es terapéutico.",
+            "Porque cocinar juntos siempre termina en diversión.",
+            "Porque hacer mandados contigo no es aburrido.",
+            "Porque cualquier plan contigo es el mejor plan.",
+            "Porque no necesitos hacer nada fancy para divertirnos.",
+            "Porque estar aburridos juntos es divertido.",
+            "Porque las conversaciones profundas a la medianoche.",
+            "Porque los silencios cómodos entre nosotros.",
+            "Porque podemos estar en paz sin decir nada.",
+            "Porque tu presencia calma mi ansiedad.",
+            "Porque me haces sentir en paz conmigo mismo.",
+            "Porque eres mi hogar, estés donde estés.",
+            "Porque contigo me siento completo.",
+            "Porque llenas vacíos que no sabía que tenía.",
+            "Porque me complementas de maneras perfectas.",
+            "Porque juntos somos mejores que separados.",
+            "Porque el equipo que formamos es imbatible.",
+            "Porque nos apoyamos en todo momento.",
+            "Porque celebramos juntos cada victoria.",
+            "Porque lloramos juntos en las derrotas.",
+            "Porque no hay altibajos que no podamos superar.",
+            "Porque nuestra comunicación mejora cada día.",
+            "Porque aprendemos de cada discusión.",
+            "Porque crecemos juntos en cada desafío.",
+            "Porque el amor que tenemos madura y se fortalece.",
+            "Porque cada día te amo más que ayer.",
+            "Porque el amor contigo es un viaje, no un destino.",
+            "Porque descubro cosas nuevas de ti que adoro.",
+            "Porque siempre hay algo más por aprender de ti.",
+            "Porque me mantienes intrigado e interesado.",
+            "Porque nunca dejas de sorprenderme.",
+            "Porque tienes capas que solo yo conozco.",
+            "Porque me dejas ver tu lado vulnerable.",
+            "Porque confías en mí con tus miedos más profundos.",
+            "Porque compartes tus sueños más locos conmigo.",
+            "Porque me dejas ser parte de tu mundo interior.",
+            "Porque me permites conocerte verdaderamente.",
+            "Porque eres auténtica conmigo siempre.",
+            "Porque no hay máscaras ni pretensiones entre nosotros.",
+            "Porque puedes ser tú misma sin miedo.",
+            "Porque te amo en tus días buenos y malos.",
+            "Porque te encuentro hermosa sin maquillaje.",
+            "Porque te amo cuando estás de buen humor y de malo.",
+            "Porque tu enojo incluso me parece adorable.",
+            "Porque tus celos me hacen sentir amado.",
+            "Porque tus inseguridades las veo como oportunidades de amarte más.",
+            "Porque tus defectos me hacen amarte más.",
+            "Porque eres humana, imperfecta y perfecta para mí.",
+            "Porque no busco a nadie más porque te tengo a ti.",
+            "Porque no hay nadie que se compare contigo.",
+            "Porque eres única e irrepetible.",
+            "Porque el destino nos unió y no lo cuestiono.",
+            "Porque cada día doy gracias por tenerte.",
+            "Porque eres la mejor parte de mi día.",
+            "Porque eres lo último en lo que pienso al dormir.",
+            "Porque eres lo primero en lo que pienso al despertar.",
+            "Porque apareces en mis sueños con frecuencia.",
+            "Porque imagino nuestro futuro juntos constantemente.",
+            "Porque no puedo esperar a pasar el resto de mi vida contigo.",
+            "Porque cada día a tu lado es un regalo.",
+            "Porque el tiempo contigo es nunca es suficiente.",
+            "Porque quiero envejecer contigo y contar nuestra historia.",
+            "Porque eres mi persona favorita en el mundo.",
+            "Porque te amo más de lo que las palabras pueden expresar.",
+            "Porque eres mi todo, mi amor, mi vida."
+        ];
+
+        let foundHearts = 0;
+        const totalHearts = 200;
+
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsBg');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.animationDelay = Math.random() * 10 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        function startGame() {
+            document.getElementById('startScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.add('active');
+            generateHearts();
+        }
+
+        function generateHearts() {
+            const area = document.getElementById('gameArea');
+            area.innerHTML = '';
+            
+            for (let i = 0; i < totalHearts; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'hidden-heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 80 + 10 + '%';
+                heart.style.top = Math.random() * 80 + 10 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.onclick = () => foundHeart(i, heart);
+                area.appendChild(heart);
+            }
+        }
+
+        function foundHeart(index, element) {
+            if (element.classList.contains('found')) return;
+            
+            element.classList.add('found');
+            foundHearts++;
+            document.getElementById('foundCount').textContent = foundHearts;
+            
+            setTimeout(() => {
+                showMessage(index);
+            }, 300);
+
+            if (foundHearts === totalHearts) {
+                setTimeout(showFinalScreen, 2000);
+            }
+        }
+
+        function showMessage(index) {
+            document.getElementById('reasonNum').textContent = index + 1;
+            document.getElementById('reasonText').textContent = reasons[index];
+            document.getElementById('messageModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('messageModal').classList.remove('active');
+        }
+
+        function showFinalScreen() {
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('finalScreen').classList.add('active');
+            
+            setTimeout(() => {
+                document.getElementById('meterBar').style.width = '100%';
+            }, 500);
+            
+            startFireworks();
+        }
+
+        function startFireworks() {
+            const canvas = document.getElementById('fireworks');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            function createFirework() {
+                const x = Math.random() * canvas.width;
+                const y = canvas.height;
+                const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const particles = [];
+                for (let i = 0; i < 30; i++) {
+                    particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: Math.random() * -15 - 5,
+                        life: 100,
+                        color: color
+                    });
+                }
+                
+                return particles;
+            }
+
+            let fireworks = [];
+            
+            function animate() {
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                if (Math.random() < 0.05) {
+                    fireworks.push(...createFirework());
+                }
+                
+                for (let i = fireworks.length - 1; i >= 0; i--) {
+                    const p = fireworks[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.3;
+                    p.life--;
+                    
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, 3, 3);
+                    
+                    if (p.life <= 0) {
+                        fireworks.splice(i, 1);
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        createFloatingHearts();
+    </script>
+</body>
+</html>
